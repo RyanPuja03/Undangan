@@ -93,7 +93,10 @@ section{position:relative;text-align:center}
 /* ============================================================
    4. HERO
    ============================================================ */
-#hero{height:100vh;min-height:620px;display:flex;align-items:flex-end}
+/* PERBAIKAN OMBAK: 100vh di HP/browser termasuk area address bar,
+   jadi bagian bawah hero (tempat ombak) tersembunyi.
+   100svh = tinggi layar yang benar-benar terlihat. */
+#hero{height:100vh;height:100svh;min-height:620px;display:flex;align-items:flex-end}
 .kartu-kaca{
   width:100%;margin:0 0 calc(var(--wave-height) * 1.1);padding:1.4rem 1.5rem 1.6rem;text-align:left;color:#fff;
   background:rgba(120,114,110,.45);
@@ -378,7 +381,7 @@ body.terbuka #musik-btn{display:block}
 <!-- ======================= COVER ======================= -->
 <div id="cover" class="foto f-cover">
   <img class="isi" src="cover.jpg" alt="" onerror="this.remove()">
-  <p class="kecil">The Wedding Ofy</p>
+  <p class="kecil">The Wedding Ofo</p>
   <h1>Rose &amp; Ryan</h1>
   <p class="dear">Dear :</p>
   <p class="tamu" id="nama-tamu">Bapak/Ibu/Saudara/i</p>
@@ -412,22 +415,23 @@ body.terbuka #musik-btn{display:block}
     <div class="judul-script muncul">With Love</div>
     <p class="pembuka muncul">Dengan memohon Ridho dan Rahmat Tuhan Yang Maha Esa, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami</p>
 
-    <!-- Penambahan class Wrapper untuk layar Desktop -->
+    <!-- PERUBAHAN: foto TIDAK diberi class "muncul" (jadi diam di tempat).
+         Yang bergerak masuk hanya tulisannya (nama, orang tua, tombol IG). -->
     <div class="mempelai-wrap">
-      <div class="muncul dari-kiri">
+      <div>
         <div class="bulat foto f-wanita"><img class="isi" src="mempelai-wanita.jpg" alt="" onerror="this.remove()"></div>
-        <h2 class="nama">Rose, S.M</h2>
-        <p class="ortu">Putri dari Bapak Zayn Malik<br>&amp; Ibu Maudy Ayundia</p>
-        <a class="btn-ig" href="https://instagram.com/" target="_blank" rel="noopener">◎ @akun.instagram</a>
+        <h2 class="nama muncul dari-kiri">Rose, S.M</h2>
+        <p class="ortu muncul dari-kiri">Putri dari Bapak Zayn Malik<br>&amp; Ibu Maudy Ayundia</p>
+        <a class="btn-ig muncul dari-kiri" href="https://instagram.com/" target="_blank" rel="noopener">◎ @akun.instagram</a>
       </div>
 
       <div class="dan">&amp;</div>
 
-      <div class="muncul dari-kanan">
+      <div>
         <div class="bulat foto f-pria"><img class="isi" src="mempelai-pria.jpg" alt="" onerror="this.remove()"></div>
-        <h2 class="nama">Ryan, S.Stat</h2>
-        <p class="ortu">Putra dari Bapak Steven Gerrard<br>&amp; Ibu Angelina Jolie</p>
-        <a class="btn-ig" href="https://instagram.com/" target="_blank" rel="noopener">◎ @akun.instagram</a>
+        <h2 class="nama muncul dari-kanan">Ryan, S.Stat</h2>
+        <p class="ortu muncul dari-kanan">Putra dari Bapak Steven Gerrard<br>&amp; Ibu Angelina Jolie</p>
+        <a class="btn-ig muncul dari-kanan" href="https://instagram.com/" target="_blank" rel="noopener">◎ @akun.instagram</a>
       </div>
     </div>
   </section>
@@ -683,7 +687,13 @@ jalur.addEventListener("scroll", () => {
 });
 titikNav.children[0].classList.add("aktif");
 
-const JEDA_SLIDE = 3500, LAMA_GESER = 1100;
+/* ============================================================
+   KECEPATAN SLIDER GALERI - ubah angka di sini (satuan milidetik)
+   JEDA_SLIDE  : waktu diam sebelum pindah ke foto berikutnya (dulu 3500)
+   LAMA_GESER  : lama animasi saat bergeser (dulu 1100)
+   JEDA_SENTUH : lama diam setelah jari dilepas sebelum jalan lagi (dulu 4000)
+   ============================================================ */
+const JEDA_SLIDE = 2500, LAMA_GESER = 1000, JEDA_SENTUH = 1000;
 const ASLI = slides.length, KLON = 3;
 for (let k = 0; k < KLON; k++){
   const c = slides[k].cloneNode(true);
@@ -747,7 +757,7 @@ let lanjutGaleri = null;
   if (jalur.scrollLeft <= pos(0) + 2) loncat(jalur.scrollLeft + putaran());
 }, { passive: true }));
 ["touchend", "mouseup", "mouseleave"].forEach(ev => jalur.addEventListener(ev, () => {
-  clearTimeout(lanjutGaleri); lanjutGaleri = setTimeout(mulaiSlideOtomatis, 4000);
+  clearTimeout(lanjutGaleri); lanjutGaleri = setTimeout(mulaiSlideOtomatis, JEDA_SENTUH);
 }, { passive: true }));
 mulaiSlideOtomatis();
 
@@ -817,5 +827,4 @@ function mulaiAnimasi(){
 }
 </script>
 </body>
-</html>
-
+</html>5
