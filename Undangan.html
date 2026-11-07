@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wedding of Rose & Ryan</title>
+
+<!-- Font dari Google Fonts (butuh internet). Kalau offline, otomatis pakai font cadangan. -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. WARNA & PENGATURAN DASAR
+   Ganti warna di sini, semua bagian ikut berubah.
+   ============================================================ */
+:root{
+  --krem:#dfcdb8;        /* warna coklat muda utama */
+  --krem-muda:#f4e8da;   /* krem lebih terang */
+  --abu:#8f8884;         /* abu kecoklatan */
+  --gelap:#2b2623;       /* warna teks */
+  --putih:#fcfbfa;
+  --font-judul:'Great Vibes','Brush Script MT',cursive;
+  --font-nama:'Playfair Display',Georgia,serif;
+  --font-isi:'Cormorant Garamond',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-isi);
+  color:var(--gelap);
+  background:#bdb6b0;
+  font-size:17px;
+  line-height:1.5;
+  overflow:hidden;            /* dikunci dulu sampai tombol "Open Invitation" ditekan */
+}
+body.terbuka{overflow-y:auto}
+
+/* Semua isi undangan dibuat selebar HP, di tengah layar */
+.wadah{max-width:480px;margin:0 auto;background:var(--putih);overflow:hidden}
+section{position:relative;text-align:center}
+.judul-script{font-family:var(--font-judul);font-size:3rem;font-weight:400;line-height:1.1}
+
+/* ============================================================
+   2. FOTO
+   Setiap foto punya gambar + warna cadangan.
+   Kalau file foto belum ada, yang tampil adalah warna cadangan.
+   ============================================================ */
+.foto{
+  position:relative;            /* supaya foto mengisi kotaknya */
+  overflow:hidden;
+  isolation:isolate;
+  background-color:#a9a29c;     /* abu-abu sementara, tampil kalau foto belum ada */
+}
+.foto img.isi{
+  position:absolute!important;
+  inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  z-index:-1;
+}
+/* Warna abu-abu sementara tiap bagian (tertutup otomatis begitu foto ada) */
+.f-cover   {background:linear-gradient(160deg,#a8a09a,#6f6761)}
+.f-hero    {background:linear-gradient(160deg,#b9b2ac,#8a827c)}
+.f-wanita  {background:linear-gradient(160deg,#c9c2bc,#9a928c)}
+.f-pria    {background:linear-gradient(160deg,#c9c2bc,#9a928c)}
+.f-lebar   {background:linear-gradient(160deg,#d0c9c3,#a49c96)}
+.f-lengkung{background:linear-gradient(160deg,#b3aba5,#857d77)}
+.f-rsvp    {background:linear-gradient(160deg,#a39b95,#6e6660)}
+.f-penutup {background:linear-gradient(160deg,#b6aea8,#8a827c)}
+
+/* ============================================================
+   3. COVER (layar pembuka)
+   ============================================================ */
+#cover{
+  position:fixed;inset:0;z-index:100;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding-bottom:22vh;color:#fff;text-align:center;
+  transition:transform 1.6s cubic-bezier(.77,0,.18,1), opacity 1.6s ease;
+}
+#cover::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.55))}
+#cover > *{position:relative}
+#cover.tutup{transform:translateY(-100%);opacity:0;pointer-events:none}
+#cover > :not(img){transition:opacity .6s ease, transform .8s ease}
+#cover.tutup > :not(img){opacity:0;transform:translateY(-24px)}
+#cover .kecil{font-size:.9rem;letter-spacing:2px}
+#cover h1{font-family:var(--font-judul);font-weight:400;font-size:3.2rem;margin:.1rem 0 .6rem}
+#cover .dear{font-style:italic;font-size:1rem}
+#cover .tamu{font-family:var(--font-nama);font-weight:600;font-size:1.2rem;margin-bottom:1rem}
+.tombol{
+  display:inline-block;cursor:pointer;
+  font-family:var(--font-isi);font-size:1rem;
+  padding:.5rem 1.4rem;border:1px solid var(--gelap);border-radius:4px;
+  background:var(--putih);color:var(--gelap);
+}
+.tombol:active{transform:scale(.96)}
+.tombol.gelap{background:#3a3532;color:#fff;border-color:#3a3532;font-size:.9rem;padding:.35rem 1.2rem}
+
+/* ============================================================
+   4. HERO (foto besar + kartu kaca)
+   ============================================================ */
+#hero{height:100vh;min-height:620px;display:flex;align-items:flex-end}
+.kartu-kaca{
+  width:100%;margin:0 0 calc(var(--wave-height) * 1.1);padding:1.4rem 1.5rem 1.6rem;text-align:left;color:#fff;
+  background:rgba(120,114,110,.45);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-radius:0 90px 0 0;
+}
+.kartu-kaca .judul-script{font-size:3.4rem;margin:.2rem 0 .6rem}
+.kartu-kaca hr{border:0;border-top:1px solid rgba(255,255,255,.6);margin:.5rem 0 .8rem}
+.kartu-kaca p{font-size:.85rem;line-height:1.5}
+
+.pembatas{background:var(--krem);padding:1.6rem 0}
+.pembatas svg{width:280px;height:30px}
+.kutipan{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.spasi1{padding-top:10px}
+.spasi2{padding-top:10px}
+/* ============================================================
+   5. WITH LOVE (profil mempelai)
+   ============================================================ */
+#mempelai{
+  padding:3.5rem 1.5rem 3rem;
+  background:linear-gradient(180deg,#c6c4c5 0%,#e8e7e7 25%,var(--putih) 55%);
+}
+#mempelai .pembuka{font-style:italic;font-size:.95rem;margin:.6rem 0 2.5rem}
+.bulat{width:min(72%,340px);aspect-ratio:1/1;border-radius:50%;margin:0 auto 1.4rem}
+.nama{font-family:var(--font-nama);font-size:1.7rem;font-weight:600}
+.ortu{font-style:italic;font-size:.9rem;margin:.6rem 0 .9rem}
+.btn-ig{
+  display:inline-block;font-size:.85rem;color:var(--gelap);text-decoration:none;
+  border:1px solid #777;padding:.25rem 1rem;border-radius:3px;background:rgba(255,255,255,.6);
+}
+.dan{font-family:var(--font-judul);font-size:3rem;margin:1.8rem 0}
+
+/* ============================================================
+   6. SAVE THE DATE + COUNTDOWN
+   ============================================================ */
+#tanggal{background:var(--krem);padding:3rem 1.5rem}
+#tanggal .tgl{font-size:1.15rem;margin:.4rem 0 1rem}
+#tanggal hr{border:0;border-top:1px solid var(--gelap);width:85%;margin:0 auto 1.4rem}
+.hitung{display:flex;justify-content:space-between;align-items:flex-start;max-width:360px;margin:0 auto 1.4rem}
+.hitung .kotak b{display:block;font-family:var(--font-nama);font-weight:400;font-size:2.2rem;line-height:1.1}
+.hitung .kotak small{font-size:.8rem}
+.hitung .titik{font-size:1.8rem;padding-top:.2rem}
+.btn-garis{
+  display:inline-block;font-family:var(--font-isi);font-size:.9rem;color:var(--gelap);
+  text-decoration:none;cursor:pointer;background:transparent;
+  border:1px solid #6a625d;padding:.35rem 1.2rem;border-radius:3px;
+}
+
+/* ============================================================
+   7. ACARA (Akad & Resepsi)
+   ============================================================ */
+#acara{background:var(--krem);padding:0 1.5rem 3rem}
+.lengkung{
+  width:100%;aspect-ratio:3/4;border-radius:999px 999px 0 0;
+  border:3px double #2b2623;box-shadow:0 4px 10px rgba(0,0,0,.3);
+}
+.kartu-hari{
+  background:var(--krem-muda);border-radius:8px;padding:1rem;margin:1.2rem 1rem 1.8rem;
+}
+.kartu-hari .judul-script{font-size:2.2rem}
+.acara h3{font-family:var(--font-nama);font-weight:400;font-size:1.6rem;letter-spacing:1px}
+.acara .jam{display:inline-block;background:var(--krem-muda);padding:0 .8rem;margin:.4rem 0 1rem}
+.acara .tempat{font-weight:600}
+.acara p{font-size:.95rem}
+.acara .btn-garis{margin:.8rem 0 .6rem}
+.ikon{font-size:2.4rem;margin:.4rem 0 .6rem}
+
+/* ============================================================
+   8. GALERI (slider geser)
+   ============================================================ */
+#galeri{padding:2rem 0 1rem;background:var(--putih)}
+.slider{position:relative;margin:1rem 0 .6rem}
+.jalur{
+  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+  gap:0;padding:0 36px;scrollbar-width:none;
+}
+.jalur::-webkit-scrollbar{display:none}
+.jalur .foto{flex:0 0 50%;aspect-ratio:3/4;scroll-snap-align:start}
+.panah{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:2;
+  background:none;border:0;font-size:1.4rem;cursor:pointer;padding:.5rem;color:var(--gelap);
+}
+.panah.kiri{left:0}.panah.kanan{right:0}
+.titik-nav{display:flex;justify-content:center;gap:6px;margin:.6rem 0 1.4rem}
+.titik-nav i{width:6px;height:6px;border-radius:50%;background:#ccc}
+.titik-nav i.aktif{background:#333}
+.galeri-besar{padding:0 30px 30px;display:grid;gap:8px}
+.galeri-besar .foto{width:100%;aspect-ratio:3/4}
+
+/* ============================================================
+   9. WEDDING GIFT (amplop digital)
+   ============================================================ */
+#gift{background:var(--krem);padding:2.8rem 1.5rem}
+.bingkai{border:1px solid #fff;outline:1px solid #fff;outline-offset:-8px;padding:2rem 1.2rem;border-radius:6px}
+.bingkai > p{font-size:.9rem;margin:.6rem 0 1.4rem}
+.bank{margin-bottom:1.6rem}
+.bank .logo{
+  display:inline-block;font-family:var(--font-nama);font-weight:600;font-size:1.7rem;
+  letter-spacing:1px;color:#fff;background:#3a3532;padding:.2rem 1.2rem;border-radius:6px;margin-bottom:.5rem;
+}
+.bank .an{font-size:.9rem;letter-spacing:1px}
+.bank .rek{font-family:var(--font-nama);font-size:1.15rem;margin:.2rem 0 .7rem;letter-spacing:1px}
+
+/* ============================================================
+   10. RSVP & UCAPAN
+   ============================================================ */
+#rsvp{padding:1rem;display:grid;gap:1rem;position:relative;color:var(--gelap)}
+#rsvp::before{content:"";position:absolute;inset:0;background:rgba(60,55,52,.35)}
+.kartu-form{
+  position:relative;background:rgba(235,232,230,.45);padding:1.2rem;text-align:left;border-radius:3px;
+  box-shadow:0 2px 6px rgba(0,0,0,.25);
+}
+.kartu-form .judul-script{text-align:center;font-size:2.4rem}
+.kartu-form .info{text-align:center;font-size:.85rem;margin:.4rem 0 1rem}
+.kartu-form label{font-size:.85rem;display:block;margin-top:.7rem}
+.kartu-form input[type=text],.kartu-form input[type=number],.kartu-form textarea{
+  width:100%;font-family:inherit;font-size:1rem;padding:.4rem .6rem;border:1px solid #666;border-radius:6px;background:#fff;
+}
+.kartu-form textarea{height:80px;resize:vertical}
+.kartu-form .radio{display:block;font-size:.9rem;margin-top:.3rem}
+.kartu-form button{
+  width:100%;margin-top:1rem;padding:.5rem;border:0;border-radius:3px;
+  background:var(--krem);font-family:inherit;font-size:1rem;cursor:pointer;
+}
+.daftar-ucapan{margin-top:1rem;max-height:260px;overflow-y:auto;display:grid;gap:8px}
+.ucapan{background:#fff;border-radius:6px;padding:.5rem .7rem;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.ucapan b{font-family:var(--font-nama);font-size:.9rem}
+.ucapan p{font-size:.9rem}
+
+/* ============================================================
+   11. PENUTUP
+   ============================================================ */
+#penutup{height:130vw;max-height:700px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3rem}
+#penutup::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(transparent,var(--putih))}
+#penutup .teks{position:relative;z-index:2}
+#penutup .judul-script{font-size:3.4rem}
+.kredit{padding:1rem 0 2.5rem;font-size:.85rem;letter-spacing:1px}
+
+/* ============================================================
+   12. TOMBOL MUSIK (melayang pojok kanan atas)
+   ============================================================ */
+#musik-btn{
+  position:fixed;top:14px;right:14px;z-index:90;width:38px;height:38px;border-radius:50%;
+  border:0;background:rgba(30,28,27,.85);color:#fff;font-size:1.1rem;cursor:pointer;display:none;font-size: 28px;
+}
+body.terbuka #musik-btn{display:block}
+#musik-btn.main{animation:putar 4s linear infinite}
+@keyframes putar{to{transform:rotate(360deg)}}
+
+/* ============================================================
+   13. ANIMASI MUNCUL SAAT DISCROLL
+   ============================================================ */
+.muncul{
+  opacity:0;transform:translateY(80px);
+  transition:opacity 1.3s cubic-bezier(.22,1,.36,1), transform 1.3s cubic-bezier(.22,1,.36,1),
+             filter 1.3s cubic-bezier(.22,1,.36,1), letter-spacing 1.6s cubic-bezier(.22,1,.36,1);
+}
+/* Variasi arah: tambahkan class ini bersama "muncul" */
+.muncul.dari-kiri{transform:translateX(-70px)}
+.muncul.dari-kanan{transform:translateX(70px)}
+.muncul.zoom{transform:scale(.86)}
+/* Tulisan script: muncul dari buram + huruf merapat */
+.judul-script.muncul{filter:blur(10px);letter-spacing:.14em}
+.muncul.tampil{opacity:1;transform:none}
+.judul-script.muncul.tampil{filter:none;letter-spacing:0}
+
+/* Foto pembuka, hero, dan penutup zoom pelan terus-menerus */
+@keyframes zoomPelan{from{transform:scale(1)}to{transform:scale(1.12)}}
+#cover img.isi,#hero img.isi,#penutup img.isi{animation:zoomPelan 16s ease-in-out infinite alternate}
+
+/* Kalau HP diatur "kurangi animasi", semua animasi dimatikan */
+@media (prefers-reduced-motion:reduce){
+  .muncul,.judul-script.muncul{opacity:1;transform:none;filter:none;letter-spacing:0;transition:none}
+  .foto img.isi{animation:none!important}
+  .wave{animation:none}
+}
+
+/* ============================================================
+   14. OMBAK (di antara foto hero dan bagian mempelai)
+   Satu gambar gelombang (SVG kecil) diulang ke samping,
+   lalu digeser terus-menerus oleh animasi.
+   Warna ombak = warna paling atas bagian "With Love" (#c6c4c5),
+   supaya ombak paling depan menyatu dengan bagian di bawahnya.
+   ============================================================ */
+:root{--wave-height:100px;--wave-width:1000px}
+@media (max-width:768px){:root{--wave-height:75px;--wave-width:700px}}
+@media (max-width:480px){:root{--wave-height:65px;--wave-width:550px}}
+
+/* Kotak pembungkus: lebih tinggi dari satu ombak supaya empat lapisan muat bertumpuk */
+.wavecon{
+  position:relative;
+  height:calc(var(--wave-height) * 1.4);
+  margin-top:calc(var(--wave-height) * -1.4);   /* naik menimpa bawah foto hero */
+  overflow:hidden;
+  z-index:2;
+  pointer-events:none; 
+  /* jari bisa menembus ombak */
+}
+
+/* Tiap lapisan ombak membawa gambar gelombangnya sendiri.
+   Ganti warna di fill='%23c6c4c5' (tulis %23 sebagai ganti #). */
+.wave{
+  position:absolute;left:0;top:50px;width:100%;
+  height:var(--wave-height);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'><path d='M0 50 C125 0 375 100 500 50 C625 0 875 100 1000 50 V100 H0 Z' fill='%23c6c4c5'/></svg>");
+  background-repeat:repeat-x;
+  background-size:var(--wave-width) var(--wave-height);
+}
+
+/* Empat lapisan, dari belakang ke depan:
+   makin tinggi ombaknya, makin pudar (opacity kecil).
+   wave4 paling rendah dan opacity 1, jadi menyatu dengan bagian di bawahnya.
+   animation-delay negatif = tiap lapisan mulai dari posisi geser yang berbeda. */
+.wave1{bottom:calc(var(--wave-height) * .36);opacity:.18;animation:geserKanan 14s linear -2s infinite}
+.wave2{bottom:calc(var(--wave-height) * .24);opacity:.35;animation:geserKiri  10s linear -5s infinite}
+.wave3{bottom:calc(var(--wave-height) * .12);opacity:.60;animation:geserKanan 18s linear -9s infinite}
+.wave4{bottom:0;                             opacity:1;  animation:geserKiri  12s linear -1s infinite}
+
+/* Menggeser sejauh tepat satu gelombang supaya sambungannya mulus */
+@keyframes geserKanan{from{background-position-x:0}to{background-position-x:var(--wave-width)}}
+@keyframes geserKiri{from{background-position-x:0}to{background-position-x:calc(var(--wave-width) * -1)}}
+</style>
+</head>
+
+<body>
+
+<!-- Tombol musik -->
+<button id="musik-btn" aria-label="Putar atau jeda musik">♪</button>
+
+<!--Musik-->
+<audio id="musik" loop preload="auto"><source src="ZAYN, Zhavia Ward - A Whole New World (End Title) (From _Aladdin_).mp3" type="audio/mpeg"></audio>
+
+<!-- ======================= COVER ======================= -->
+<div id="cover" class="foto f-cover">
+  <img class="isi" src="cover.jpg" alt="" onerror="this.remove()">
+  <p class="kecil">The Wedding Of</p>
+  <h1>Rose &amp; Ryan</h1>
+  <p class="dear">Dear :</p>
+  <p class="tamu" id="nama-tamu">Bapak/Ibu/Saudara/i</p>
+  <button class="tombol" id="btn-buka">✉ Open Invitation</button>
+</div>
+
+<div class="wadah">
+
+  <!-- ======================= HERO ======================= -->
+  <section id="hero" class="foto f-hero">
+  <img class="isi" src="hero.jpg" alt="" onerror="this.remove()">
+    <div class="kartu-kaca muncul">
+      <p>The Wedding Of</p>
+      <div class="judul-script">Rose &amp; Ryan</div>
+      <hr>
+      <p class="kutipan">"Ihaiva stam ma vi yaustam, visvam ayur vyasnutam, kridantau putrair naptrbhih, modamanau sve grhe."<span class="spasi1"></span>"Wahai pasangan suami-isteri, semoga kalian tetap bersatu dan tidak pernah terpisahkan. Semoga kalian mencapai hidup penuh kebahagiaan, tinggal di rumah yang penuh kegembiraan bersama seluruh keturunanmu."<span class="spasi2"></span>~ Rg Veda X.85.42 ~
+        </p>
+    </div>
+  </section>
+
+  <!-- KODE OMBAK (Taruh di antara seksi) -->
+  <div class="wavecon">
+ <!-- Empat lapisan ombak -->
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+        <div class="wave wave4"></div>
+  </div>
+
+  <!-- ======================= MEMPELAI ======================= -->
+  <section id="mempelai">
+    <div class="judul-script muncul">With Love</div>
+  
+    <p class="pembuka muncul">Dengan memohon Ridho dan Rahmat Tuhan Yang Maha Esa, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami</p>
+
+    <div class="muncul dari-kiri">
+      <div class="bulat foto f-wanita"><img class="isi" src="mempelai-wanita.jpg" alt="" onerror="this.remove()"></div>
+      <h2 class="nama">Rose, S.M</h2>
+      <p class="ortu">Putri dari Bapak Zayn Malik<br>&amp; Ibu Maudy Ayundia</p>
+      <a class="btn-ig" href="https://instagram.com/" target="_blank" rel="noopener">◎ @akun.instagram</a>
+    </div>
+
+    <div class="dan">&amp;</div>
+
+    <div class="muncul dari-kanan">
+      <div class="bulat foto f-pria"><img class="isi" src="mempelai-pria.jpg" alt="" onerror="this.remove()"></div>
+      <h2 class="nama">Ryan, S.Stat</h2>
+      <p class="ortu">Putra dari Bapak Steven Gerrard<br>&amp; Ibu Angelina Jolie</p>
+      <a class="btn-ig" href="https://instagram.com/" target="_blank" rel="noopener">◎ @akun.instagram</a>
+    </div>
+  </section>
+
+  <!--<div class="foto f-lebar" style="aspect-ratio:4/3"><img class="isi" src="lebar.jpg" alt="" onerror="this.remove()"></div>-->
+
+  <!-- ======================= SAVE THE DATE ======================= -->
+  <section id="tanggal">
+    <div class="judul-script muncul">Save The Date</div>
+    <p class="tgl">16 Januari 2027</p>
+    <hr>
+    <div class="hitung muncul">
+      <div class="kotak"><b id="h-hari">0</b><small>Hari</small></div><span class="titik">:</span>
+      <div class="kotak"><b id="h-jam">0</b><small>Jam</small></div><span class="titik">:</span>
+      <div class="kotak"><b id="h-menit">0</b><small>Menit</small></div><span class="titik">:</span>
+      <div class="kotak"><b id="h-detik">0</b><small>Detik</small></div>
+    </div>
+    <a class="btn-garis" id="btn-kalender" href="#" target="_blank" rel="noopener">+ Add to Calendar</a>
+  </section>
+
+  <!-- ======================= ACARA ======================= -->
+  <section id="acara">
+    <div class="lengkung foto f-lengkung muncul zoom"><img class="isi" src="lengkung.jpg" alt="" onerror="this.remove()"></div>
+
+    <div class="kartu-hari muncul">
+      <div class="judul-script">Sabtu</div>
+      <p>16 Desember 2026</p>
+    </div>
+
+    <div class="acara muncul">
+      <h3>AKAD</h3>
+      <div class="jam">10.00 WITA - Selesai</div>
+      <p class="tempat">Nama Gedung / Tempat</p>
+      <p>Jl. Contoh Alamat No. 123<br>Kec. Contoh, Kab. Contoh</p>
+      <a class="btn-garis" href="https://maps.google.com/" target="_blank" rel="noopener">Lihat Maps</a>
+    </div>
+
+    <div class="ikon">🥂</div>
+
+    <div class="acara muncul">
+      <h3>RESEPSI</h3>
+      <div class="jam">19.00 WITA - Selesai</div>
+      <p class="tempat">Nama Gedung / Tempat</p>
+      <p>Jl. Contoh Alamat No. 123<br>Kec. Contoh, Kab. Contoh</p>
+      <a class="btn-garis" href="https://maps.google.com/" target="_blank" rel="noopener">Lihat Maps</a>
+    </div>
+  </section>
+
+  <!-- ======================= GALERI ======================= -->
+  <section id="galeri">
+    <div class="judul-script muncul">Our Gallery</div>
+    <div class="slider">
+      <button class="panah kiri" id="g-kiri" aria-label="Sebelumnya">‹</button>
+      <div class="jalur" id="jalur">
+        <!-- Ganti nama file foto sesuai fotomu -->
+        <div class="foto"><img class="isi" src="galeri1.jpg" alt="" onerror="this.remove()"></div>
+        <div class="foto"><img class="isi" src="galeri2.jpg" alt="" onerror="this.remove()"></div>
+        <div class="foto"><img class="isi" src="galeri3.jpg" alt="" onerror="this.remove()"></div>
+        <div class="foto"><img class="isi" src="galeri4.jpg" alt="" onerror="this.remove()"></div>
+        <div class="foto"><img class="isi" src="galeri5.jpg" alt="" onerror="this.remove()"></div>
+        <div class="foto"><img class="isi" src="galeri6.jpg" alt="" onerror="this.remove()"></div>
+        <div class="foto"><img class="isi" src="galeri7.jpg" alt="" onerror="this.remove()"></div>
+        <div class="foto"><img class="isi" src="galeri8.jpg" alt="" onerror="this.remove()"></div>
+      </div>
+      <button class="panah kanan" id="g-kanan" aria-label="Berikutnya">›</button>
+    </div>
+    <div class="titik-nav" id="titik-nav"></div>
+
+    <div class="galeri-besar">
+      <div class="foto muncul zoom"><img class="isi" src="galeri9.jpg" alt="" onerror="this.remove()"></div>
+      <div class="foto muncul zoom"><img class="isi" src="galeri10.jpg" alt="" onerror="this.remove()"></div>
+    </div>
+  </section>
+
+  <!-- ======================= WEDDING GIFT ======================= -->
+  <section id="gift">
+    <div class="bingkai">
+      <div class="judul-script muncul">Wedding Gift</div>
+      <p class="muncul">Doa restu anda merupakan karunia yang sangat berarti bagi kami. Dan jika memberi adalah ungkapan tanda kasih, anda dapat memberikan kado secara cashless</p>
+
+      <div class="bank muncul">
+        <div class="logo">BANK BCA</div>
+        <div class="an">a.n. I KADEK ARYANDARA</div>
+        <div class="rek" id="rek1">1234567890</div>
+        <button class="tombol gelap" data-salin="rek1">⧉ Salin</button>
+      </div>
+
+      <div class="bank muncul">
+        <div class="logo">BANK PERMATA</div>
+        <div class="an">a.n. I KADEK ARYANDRA</div>
+        <div class="rek" id="rek2">0987654321</div>
+        <button class="tombol gelap" data-salin="rek2">⧉ Salin</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= RSVP & UCAPAN ======================= -->
+  <section id="rsvp" class="foto f-rsvp">
+  <img class="isi" src="rsvp.jpg" alt="" onerror="this.remove()">
+    <div class="kartu-form muncul">
+      <div class="judul-script">RSVP</div>
+      <p class="info">Bantu kami mempersiapkan semuanya dengan lebih baik dengan mengonfirmasi kehadiran Anda di acara pernikahan kami dengan formulir RSVP berikut :</p>
+      <form id="form-rsvp">
+        <label for="r-nama">Nama</label>
+        <input type="text" id="r-nama" required>
+        <label for="r-jumlah">Jumlah Tamu</label>
+        <input type="number" id="r-jumlah" min="1" value="1" required>
+        <label>Apakah anda akan hadir?</label>
+        <label class="radio"><input type="radio" name="hadir" value="Ya, saya akan hadir" checked> Ya. Saya akan hadir</label>
+        <label class="radio"><input type="radio" name="hadir" value="Maaf, saya tidak bisa hadir"> Tidak. Maaf, saya tidak bisa hadir</label>
+        <button type="submit">Kirim</button>
+      </form>
+    </div>
+
+    <div class="kartu-form muncul">
+      <div class="judul-script">Wedding Wish</div>
+      <p class="info">Doa terbaik anda sangat berarti bagi kami dan keluarga. Silakan tinggalkan ucapan &amp; doa tulus anda di bawah ini</p>
+      <form id="form-ucapan">
+        <input type="text" id="u-nama" placeholder="Masukkan nama anda" required>
+        <textarea id="u-pesan" placeholder="Silahkan tinggalkan pesan" required style="margin-top:8px"></textarea>
+        <button type="submit">Kirim</button>
+      </form>
+      <div class="daftar-ucapan" id="daftar-ucapan"></div>
+    </div>
+  </section>
+
+  <!-- ======================= PENUTUP ======================= -->
+  <section id="penutup" class="foto f-penutup">
+  <img class="isi" src="cover.jpg" alt="" onerror="this.remove()">
+    <div class="teks muncul">
+      <p>With Love</p>
+      <div class="judul-script">Rose &amp; Ryan</div>
+    </div>
+  </section>
+  <div class="kredit" style="text-align:center">Made with ❤ by dekryan</div>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA ACARA - ubah di sini
+   Format waktu: tahun-bulan-tanggalTjam:menit:detik+08:00 (WITA)
+   ============================================================ */
+const ACARA = {
+  judul: "Pernikahan Rose & Ryan",
+  mulai: new Date("2026-12-16T10:00:00+08:00"),
+  selesai: new Date("2026-12-16T14:00:00+08:00"),
+  lokasi: "Nama Gedung / Tempat, Jl. Contoh Alamat No. 123",
+  nomorWA: "6289662373519"   // nomor WhatsApp mempelai (awali 62, tanpa 0 / +)
+};
+
+/* ============================================================
+   1. NAMA TAMU DARI LINK
+   Contoh: undangan.html?to=Budi+Santoso  ->  "Budi Santoso"
+   ============================================================ */
+const tamu = new URLSearchParams(location.search).get("to");
+if (tamu) document.getElementById("nama-tamu").textContent = tamu;
+
+/* ============================================================
+   2. BUKA UNDANGAN + MUSIK
+   ============================================================ */
+const audio = document.getElementById("musik");
+const tombolMusik = document.getElementById("musik-btn");
+let musikJalan = false;
+let pakaiSynth = false;
+
+document.getElementById("btn-buka").addEventListener("click", () => {
+  document.getElementById("cover").classList.add("tutup");
+  document.body.classList.add("terbuka");
+  window.scrollTo(0, 0);
+  setTimeout(mulaiAnimasi, 700);   // mulai animasi saat cover sedang naik
+  mulaiMusik();
+});
+
+function mulaiMusik(){
+  // Coba putar file musik.mp3. Kalau gagal (file belum ada), pakai nada buatan.
+  audio.play().then(() => {
+    musikJalan = true; pakaiSynth = false; tombolMusik.classList.add("main");
+  }).catch(() => {
+    mulaiSynth(); musikJalan = true; pakaiSynth = true; tombolMusik.classList.add("main");
+  });
+}
+function jedaMusik(){
+  if (pakaiSynth) hentikanSynth(); else audio.pause();
+  musikJalan = false; tombolMusik.classList.remove("main");
+}
+tombolMusik.addEventListener("click", () => {
+  if (musikJalan) jedaMusik();
+  else mulaiMusik();
+});
+
+/* ---------- Nada piano lembut buatan sendiri (tanpa file) ----------
+   Progresi akor C - G - Am - F, dimainkan sebagai arpeggio pelan.
+   Ini musik original, jadi bebas hak cipta. */
+let ctx = null, timerSynth = null, langkah = 0;
+const AKOR = [
+  [261.63, 329.63, 392.00, 523.25],   // C
+  [196.00, 246.94, 293.66, 392.00],   // G
+  [220.00, 261.63, 329.63, 440.00],   // Am
+  [174.61, 220.00, 261.63, 349.23]    // F
+];
+const POLA = [0, 1, 2, 3, 2, 1, 2, 1];
+
+function bunyikan(frek, durasi, volume){
+  const t = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "triangle";
+  osc.frequency.value = frek;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(volume, t + 0.03);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + durasi);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + durasi);
+}
+function mulaiSynth(){
+  ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === "suspended") ctx.resume();
+  clearInterval(timerSynth);
+  timerSynth = setInterval(() => {
+    const akor = AKOR[Math.floor(langkah / 8) % AKOR.length];
+    if (langkah % 8 === 0) bunyikan(akor[0] / 2, 3.5, 0.10);   // nada bass di awal akor
+    bunyikan(akor[POLA[langkah % 8]], 1.6, 0.07);
+    langkah++;
+  }, 520);
+}
+function hentikanSynth(){ clearInterval(timerSynth); }
+
+/* ============================================================
+   3. COUNTDOWN
+   ============================================================ */
+function hitungMundur(){
+  let selisih = ACARA.mulai - new Date();
+  if (selisih < 0) selisih = 0;
+  const detik = Math.floor(selisih / 1000);
+  document.getElementById("h-hari").textContent  = Math.floor(detik / 86400);
+  document.getElementById("h-jam").textContent   = Math.floor(detik % 86400 / 3600);
+  document.getElementById("h-menit").textContent = Math.floor(detik % 3600 / 60);
+  document.getElementById("h-detik").textContent = detik % 60;
+}
+hitungMundur();
+setInterval(hitungMundur, 1000);
+
+/* ============================================================
+   4. TOMBOL "ADD TO CALENDAR" (Google Calendar)
+   ============================================================ */
+function formatUTC(d){ return d.toISOString().replace(/[-:]|\.\d{3}/g, ""); }
+document.getElementById("btn-kalender").href =
+  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+  "&text=" + encodeURIComponent(ACARA.judul) +
+  "&dates=" + formatUTC(ACARA.mulai) + "/" + formatUTC(ACARA.selesai) +
+  "&location=" + encodeURIComponent(ACARA.lokasi);
+
+/* ============================================================
+   5. GALERI SLIDER (panah + titik)
+   ============================================================ */
+const jalur = document.getElementById("jalur");
+const slides = jalur.children;
+const titikNav = document.getElementById("titik-nav");
+for (let i = 0; i < slides.length; i++) titikNav.appendChild(document.createElement("i"));
+
+function geser(arah){
+  jalur.scrollBy({ left: arah * slides[0].offsetWidth, behavior: "smooth" });
+}
+document.getElementById("g-kiri").onclick  = () => geser(-1);
+document.getElementById("g-kanan").onclick = () => geser(1);
+jalur.addEventListener("scroll", () => {
+  const i = Math.round(jalur.scrollLeft / slides[0].offsetWidth) % titikNav.children.length;
+  [...titikNav.children].forEach((t, n) => t.classList.toggle("aktif", n === i));
+});
+titikNav.children[0].classList.add("aktif");
+
+/* Slide otomatis yang berputar (looping tanpa putus):
+   3 foto pertama digandakan di ujung kanan. Saat slide sampai ke foto kembar itu,
+   posisinya diam-diam dipindah ke foto aslinya (tampilannya sama persis), jadi
+   terlihat berputar terus: foto 1 > 2 > ... > terakhir > 1 > 2 ...
+   Ubah JEDA_SLIDE (jeda antar foto) dan LAMA_GESER (lama geseran) dalam milidetik. */
+const JEDA_SLIDE = 3500, LAMA_GESER = 1100;
+const ASLI = slides.length, KLON = 3;
+for (let k = 0; k < KLON; k++){
+  const c = slides[k].cloneNode(true);
+  c.setAttribute("aria-hidden", "true");
+  jalur.appendChild(c);
+}
+const pos = i => slides[i].offsetLeft - jalur.offsetLeft;   // posisi geser tiap foto
+const putaran = () => pos(ASLI) - pos(0);                    // jarak satu putaran penuh
+let timerGaleri = null, sedangGeser = false, cekLoop = null;
+
+function loncat(ke){                                          // pindah instan tanpa animasi
+  jalur.style.scrollSnapType = "none";
+  jalur.scrollLeft = ke;
+  requestAnimationFrame(() => { jalur.style.scrollSnapType = ""; });
+}
+function periksaLoop(){                                       // sudah di foto kembar? pindah ke asli
+  if (sedangGeser) return;
+  if (jalur.scrollLeft >= pos(ASLI) - 1) loncat(jalur.scrollLeft - putaran());
+}
+jalur.addEventListener("scroll", () => {
+  clearTimeout(cekLoop); cekLoop = setTimeout(periksaLoop, 120);
+}, { passive: true });
+loncat(pos(0));                                               // mulai tepat di foto pertama
+window.addEventListener("load", () => loncat(pos(0)));
+
+// panah kiri di foto pertama: pindah dulu ke foto kembar supaya bisa mundur ke foto terakhir
+document.getElementById("g-kiri").onclick = () => {
+  if (jalur.scrollLeft <= pos(0) + 2) loncat(jalur.scrollLeft + putaran());
+  requestAnimationFrame(() => geser(-1));
+};
+
+function geserHalus(tujuan){
+  const awal = jalur.scrollLeft, jarak = tujuan - awal, mulai = performance.now();
+  sedangGeser = true;
+  jalur.style.scrollSnapType = "none";                        // matikan snap selama animasi
+  function langkah(sekarang){
+    const t = Math.min((sekarang - mulai) / LAMA_GESER, 1);
+    const e = t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;   // easeInOutCubic
+    jalur.scrollLeft = awal + jarak * e;
+    if (t < 1) requestAnimationFrame(langkah);
+    else { jalur.style.scrollSnapType = ""; sedangGeser = false; periksaLoop(); }
+  }
+  requestAnimationFrame(langkah);
+}
+function slideBerikutnya(){
+  if (sedangGeser) return;
+  let terdekat = 0;                                           // cari foto yang sedang di posisi kiri
+  for (let i = 0; i < slides.length; i++){
+    if (Math.abs(pos(i) - jalur.scrollLeft) < Math.abs(pos(terdekat) - jalur.scrollLeft)) terdekat = i;
+  }
+  geserHalus(pos(Math.min(terdekat + 1, slides.length - 1)));
+}
+function mulaiSlideOtomatis(){
+  clearInterval(timerGaleri);
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  timerGaleri = setInterval(slideBerikutnya, JEDA_SLIDE);
+}
+function jedaSlideOtomatis(){ clearInterval(timerGaleri); }
+let lanjutGaleri = null;
+["touchstart", "mousedown"].forEach(ev => jalur.addEventListener(ev, () => {
+  jedaSlideOtomatis(); clearTimeout(lanjutGaleri);
+  if (jalur.scrollLeft <= pos(0) + 2) loncat(jalur.scrollLeft + putaran());   // supaya bisa geser mundur dari foto pertama
+}, { passive: true }));
+["touchend", "mouseup", "mouseleave"].forEach(ev => jalur.addEventListener(ev, () => {
+  clearTimeout(lanjutGaleri); lanjutGaleri = setTimeout(mulaiSlideOtomatis, 4000);
+}, { passive: true }));
+mulaiSlideOtomatis();
+
+/* ============================================================
+   6. SALIN NOMOR REKENING
+   ============================================================ */
+document.querySelectorAll("[data-salin]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const teks = document.getElementById(btn.dataset.salin).textContent;
+    navigator.clipboard.writeText(teks).then(() => {
+      const awal = btn.textContent;
+      btn.textContent = "✓ Tersalin";
+      setTimeout(() => btn.textContent = awal, 1500);
+    });
+  });
+});
+
+/* ============================================================
+   7. RSVP -> dikirim lewat WhatsApp ke mempelai
+   ============================================================ */
+document.getElementById("form-rsvp").addEventListener("submit", e => {
+  e.preventDefault();
+  const nama = document.getElementById("r-nama").value;
+  const jumlah = document.getElementById("r-jumlah").value;
+  const hadir = document.querySelector("input[name=hadir]:checked").value;
+  const pesan = `Halo, saya ${nama}.\nKonfirmasi: ${hadir}.\nJumlah tamu: ${jumlah} orang.`;
+  window.open("https://wa.me/" + ACARA.nomorWA + "?text=" + encodeURIComponent(pesan), "_blank");
+});
+
+/* ============================================================
+   8. UCAPAN & DOA
+   Disimpan di browser (localStorage), jadi hanya terlihat di perangkat yang sama.
+   Agar ucapan tampil untuk semua tamu, nanti perlu database online (misalnya Firebase).
+   ============================================================ */
+const daftar = document.getElementById("daftar-ucapan");
+localStorage.removeItem("ucapan");
+let ucapan = [];
+try { ucapan = JSON.parse(localStorage.getItem("ucapan") || "[]"); } catch(e) {}
+if (ucapan.length === 0) {
+  ucapan = [   // contoh awal supaya tampilan tidak kosong
+    { nama: "Boby", pesan: "Selamat ya" },
+    { nama: "Ayu cantikk", pesan: "Selamat menempuh hidup baru, lancar sampai hari H!" },
+    { nama:"Bobon Santoso", pesan:"When ya"}
+  ];
+}
+function tampilkanUcapan(){
+  daftar.innerHTML = "";
+  ucapan.slice().reverse().forEach(u => {
+    const kotak = document.createElement("div");
+    kotak.className = "ucapan";
+    const b = document.createElement("b"); b.textContent = u.nama;
+    const p = document.createElement("p"); p.textContent = u.pesan;   // textContent = aman dari kode jahat
+    kotak.append(b, p);
+    daftar.appendChild(kotak);
+  });
+}
+tampilkanUcapan();
+document.getElementById("form-ucapan").addEventListener("submit", e => {
+  e.preventDefault();
+  ucapan.push({
+    nama: document.getElementById("u-nama").value,
+    pesan: document.getElementById("u-pesan").value
+  });
+  try { localStorage.setItem("ucapan", JSON.stringify(ucapan)); } catch(err) {}
+  tampilkanUcapan();
+  e.target.reset();
+});
+
+/* ============================================================
+   9. ANIMASI MUNCUL SAAT DISCROLL
+   ============================================================ */
+function mulaiAnimasi(){
+  const pengamat = new IntersectionObserver((daftarElemen, p) => {
+    // elemen yang muncul bersamaan diberi jeda 0.18 detik supaya tampil berurutan
+    daftarElemen.filter(e => e.isIntersecting).forEach((e, i) => {
+      e.target.style.transitionDelay = (i * 0.18) + "s";
+      e.target.classList.add("tampil");
+      p.unobserve(e.target);   // sekali saja, tidak diulang
+    });
+  }, { threshold: 0.40 });
+  document.querySelectorAll(".muncul").forEach(el => pengamat.observe(el));
+}
+</script>
+</body>
+</html>
