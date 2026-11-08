@@ -274,6 +274,7 @@ section{position:relative;text-align:center}
 #penutup .teks{position:relative;z-index:2}
 #penutup .judul-script{font-size:3.4rem}
 .kredit{padding:1rem 0 2.5rem;font-size:.85rem;letter-spacing:1px}
+.ucapan-akhir{font-size:14px;padding-bottom:12px}
 
 /* ============================================================
    12. TOMBOL MUSIK
@@ -484,7 +485,7 @@ body.terbuka #musik-btn{display:block}
         <div class="bulat foto f-pria"><img class="isi" src="mempelai-pria.jpg" alt="" onerror="this.remove()"></div>
         <h2 class="nama muncul dari-kanan">Ryan, S.Stat</h2>
         <p class="ortu muncul dari-kanan">Putra dari Bapak Steven Gerrard<br>&amp; Ibu Angelina Jolie</p>
-        <a class="btn-ig muncul dari-kanan" href="https://www.instagram.com/deyaanz_?rpxt=eXYxd2h1eTZ2ejA2" target="_blank" rel="noopener">◎ @akun.instagram</a>
+        <a class="btn-ig muncul dari-kanan" href="https://instagram.com/" target="_blank" rel="noopener">◎ @akun.instagram</a>
       </div>
     </div>
   </section>
@@ -619,6 +620,7 @@ body.terbuka #musik-btn{display:block}
   <img class="isi" src="cover.jpg" alt="" onerror="this.remove()">
     <div class="sprinkle" data-jumlah="28" aria-hidden="true"></div>
     <div class="teks muncul">
+      <p class="ucapan-akhir">Suatu kehormatan dan kebahagiaan bagi kami, jika Anda bersedia hadir dan memberikan restu kepada kami.</p>
       <p>With Love</p>
       <div class="judul-script">Rose &amp; Ryan</div>
     </div>
@@ -775,7 +777,7 @@ titikNav.children[0].classList.add("aktif");
    LAMA_GESER  : lama animasi saat bergeser (dulu 1100)
    JEDA_SENTUH : lama diam setelah jari dilepas sebelum jalan lagi (dulu 4000)
    ============================================================ */
-const JEDA_SLIDE = 2000, LAMA_GESER = 600, JEDA_SENTUH = 1200;
+const JEDA_SLIDE = 2000, LAMA_GESER = 800, JEDA_SENTUH = 100;
 const ASLI = slides.length, KLON = 3;
 for (let k = 0; k < KLON; k++){
   const c = slides[k].cloneNode(true);
