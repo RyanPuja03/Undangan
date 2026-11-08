@@ -78,9 +78,10 @@ section{position:relative;text-align:center}
 #cover > :not(img){transition:opacity .6s ease, transform .8s ease}
 #cover.tutup > :not(img){opacity:0;transform:translateY(-24px)}
 #cover .kecil{font-size:.9rem;letter-spacing:2px}
-#cover h1{font-family:var(--font-judul);font-weight:400;font-size:3.2rem;margin:.1rem 0 .6rem}
+#cover h1{font-family:var(--font-judul);font-weight:400;font-size:3.2rem;margin:.1rem 0 .6rem;color:#f3dfae;text-shadow:0 0 18px rgba(243,223,174,.45),0 2px 8px rgba(0,0,0,.35)}
 #cover .dear{font-style:italic;font-size:1rem}
-#cover .tamu{font-family:var(--font-nama);font-weight:600;font-size:1.2rem;margin-bottom:1rem}
+#cover .tamu{font-family:var(--font-nama);font-weight:600;font-size:1.2rem;margin-bottom:1rem;color:#f3dfae}
+#cover .tombol{border-color:#e8c878}
 .tombol{
   display:inline-block;cursor:pointer;
   font-family:var(--font-isi);font-size:1rem;
@@ -90,6 +91,26 @@ section{position:relative;text-align:center}
 .tombol:active{transform:scale(.96)}
 .tombol.gelap{background:#3a3532;color:#fff;border-color:#3a3532;font-size:.9rem;padding:.35rem 1.2rem}
 
+/* SPRINKLE EMAS DI COVER
+   .bokeh = lingkaran besar, buram, transparan (efek lensa blur)
+   .kilau = titik kecil tajam yang bercahaya */
+.sprinkle{position:absolute!important;inset:0;overflow:hidden;pointer-events:none}
+.emas{
+  position:absolute;border-radius:50%;opacity:0;
+  background:radial-gradient(circle,rgba(255,240,190,.95) 0%,rgba(244,200,100,.55) 45%,rgba(244,200,100,0) 72%);
+  animation:naikEmas var(--durasi,9s) ease-in-out var(--tunda,0s) infinite;
+}
+.emas.bokeh{filter:blur(3px);--maks:.45}
+.emas.kilau{box-shadow:0 0 6px 2px rgba(255,214,120,.7);--maks:.95}
+@keyframes naikEmas{
+  0%{opacity:0;transform:translate(0,0) scale(.6)}
+  20%{opacity:var(--maks,.8)}
+  50%{transform:translate(var(--goyang,12px),calc(var(--jarak,-120px) * .5)) scale(1)}
+  80%{opacity:var(--maks,.8)}
+  100%{opacity:0;transform:translate(calc(var(--goyang,12px) * -1),var(--jarak,-120px)) scale(.7)}
+}
+@media (prefers-reduced-motion:reduce){.emas{animation:none;opacity:.5}}
+
 /* ============================================================
    4. HERO
    ============================================================ */
@@ -98,26 +119,45 @@ section{position:relative;text-align:center}
    100svh = tinggi layar yang benar-benar terlihat. */
 #hero{height:100vh;height:100svh;min-height:620px;display:flex;align-items:flex-end}
 .kartu-kaca{
-  width:100%;margin:0 0 calc(var(--wave-height) * 1.1);padding:1.4rem 1.5rem 1.6rem;text-align:left;color:#fff;
+  width:100%;margin:0 0 calc(var(--wave-height) * 1.1);padding:1.1rem 1.5rem 1.2rem;text-align:left;color:#fff;
   background:rgba(120,114,110,.45);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   border-radius:0 90px 0 0;
 }
-.kartu-kaca .judul-script{font-size:3.4rem;margin:.2rem 0 .6rem}
-.kartu-kaca hr{border:0;border-top:1px solid rgba(255,255,255,.6);margin:.5rem 0 .8rem}
-.kartu-kaca p{font-size:.85rem;line-height:1.5}
+.kartu-kaca .judul-script{font-size:3.2rem;margin:.1rem 0 .4rem;color:#f3dfae;text-shadow:0 0 14px rgba(243,223,174,.35)}
+.kartu-kaca hr{border:0;height:1px;background:linear-gradient(90deg,transparent,#e8c878,transparent);margin:.5rem 0 .8rem}
+.kartu-kaca p{font-size:.8rem;line-height:1.4}
 .pembatas{background:var(--krem);padding:1.6rem 0}
 .pembatas svg{width:280px;height:30px}
 .kutipan{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
-.spasi1{padding-top:10px}
-.spasi2{padding-top:10px}
+.spasi1{padding-top:6px}
+.spasi2{padding-top:6px}
+
+/* HERO: teks muncul bertahap, tanggal, dan panah scroll */
+.kartu-kaca .urut{opacity:0;transform:translateY(16px)}
+.kartu-kaca.tampil .urut{animation:munculUrut 1s cubic-bezier(.22,1,.36,1) forwards;animation-delay:var(--d,0s)}
+@keyframes munculUrut{to{opacity:1;transform:none}}
+.kartu-kaca .tgl-hero{font-family:var(--font-nama);font-size:1rem;letter-spacing:3px;margin:.1rem 0 .2rem;color:#f3dfae}
+.scroll-petunjuk{
+  position:absolute;left:0;right:0;bottom:calc(var(--wave-height) * .7);
+  display:flex;justify-content:center;z-index:1;pointer-events:none;
+  animation:turunNaik 2s ease-in-out infinite;
+}
+@keyframes turunNaik{
+  0%,100%{transform:translateY(0);opacity:.45}
+  50%{transform:translateY(6px);opacity:1}
+}
+@media (prefers-reduced-motion:reduce){
+  .kartu-kaca .urut,.kartu-kaca.tampil .urut{opacity:1;transform:none;animation:none}
+  .scroll-petunjuk{animation:none}
+}
 
 /* ============================================================
    5. WITH LOVE (profil mempelai)
    ============================================================ */
 #mempelai{
   padding:3.5rem 1.5rem 3rem;
-  background:linear-gradient(180deg,#c6c4c5 0%,#e8e7e7 25%,var(--putih) 55%);
+  background:linear-gradient(180deg,#d6cbbf 0%,#efe8e0 25%,var(--putih) 55%);
 }
 #mempelai .pembuka{font-style:italic;font-size:.95rem;margin:.6rem 0 2.5rem}
 .bulat{width:min(72%,340px);aspect-ratio:1/1;border-radius:50%;margin:0 auto 1.4rem}
@@ -252,17 +292,25 @@ body.terbuka #musik-btn{display:block}
 .muncul{
   opacity:0;transform:translateY(80px);
   transition:opacity 1.3s cubic-bezier(.22,1,.36,1), transform 1.3s cubic-bezier(.22,1,.36,1),
-             filter 1.3s cubic-bezier(.22,1,.36,1), letter-spacing 1.6s cubic-bezier(.22,1,.36,1);
+             filter 1.3s cubic-bezier(.22,1,.36,1);
 }
 .muncul.dari-kiri{transform:translateX(-70px)}
 .muncul.dari-kanan{transform:translateX(70px)}
 .muncul.zoom{transform:scale(.86)}
-.judul-script.muncul{filter:blur(10px);letter-spacing:.14em}
+.judul-script.muncul{filter:blur(10px)}
 .muncul.tampil{opacity:1;transform:none}
-.judul-script.muncul.tampil{filter:none;letter-spacing:0}
+.judul-script.muncul.tampil{filter:none}
 
 @keyframes zoomPelan{from{transform:scale(1)}to{transform:scale(1.12)}}
-#cover img.isi,#hero img.isi,#penutup img.isi{animation:zoomPelan 16s ease-in-out infinite alternate}
+#cover img.isi,#penutup img.isi{animation:zoomPelan 16s ease-in-out infinite alternate}
+
+/* FOTO HERO: digeser naik 5% supaya wajah lebih tinggi dari kartu.
+   Skala awal 1.1 dipakai agar tidak ada celah kosong di bagian bawah foto. */
+#hero img.isi{animation:zoomHero 16s ease-in-out infinite alternate}
+@keyframes zoomHero{
+  from{transform:translateY(-5%) scale(1.1)}
+  to{transform:translateY(-5%) scale(1.18)}
+}
 
 @media (prefers-reduced-motion:reduce){
   .muncul,.judul-script.muncul{opacity:1;transform:none;filter:none;letter-spacing:0;transition:none}
@@ -288,7 +336,7 @@ body.terbuka #musik-btn{display:block}
 .wave{
   position:absolute;left:0;top:50px;width:100%;
   height:var(--wave-height);
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'><path d='M0 50 C125 0 375 100 500 50 C625 0 875 100 1000 50 V100 H0 Z' fill='%23c6c4c5'/></svg>");
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 100' preserveAspectRatio='none'><path d='M0 50 C125 0 375 100 500 50 C625 0 875 100 1000 50 V100 H0 Z' fill='%23d6cbbf'/></svg>");
   background-repeat:repeat-x;
   background-size:var(--wave-width) var(--wave-height);
 }
@@ -381,7 +429,8 @@ body.terbuka #musik-btn{display:block}
 <!-- ======================= COVER ======================= -->
 <div id="cover" class="foto f-cover">
   <img class="isi" src="cover.jpg" alt="" onerror="this.remove()">
-  <p class="kecil">The Wedding Ofo</p>
+  <div class="sprinkle" aria-hidden="true"></div>
+  <p class="kecil">The Wedding Of</p>
   <h1>Rose &amp; Ryan</h1>
   <p class="dear">Dear :</p>
   <p class="tamu" id="nama-tamu">Bapak/Ibu/Saudara/i</p>
@@ -393,11 +442,15 @@ body.terbuka #musik-btn{display:block}
   <!-- ======================= HERO ======================= -->
   <section id="hero" class="foto f-hero">
   <img class="isi" src="hero.jpg" alt="" onerror="this.remove()">
+    <div class="scroll-petunjuk" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 9l7 7 7-7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
     <div class="kartu-kaca muncul">
-      <p>The Wedding Of</p>
-      <div class="judul-script">Rose &amp; Ryan</div>
-      <hr>
-      <p class="kutipan">"Ihaiva stam ma vi yaustam, visvam ayur vyasnutam, kridantau putrair naptrbhih, modamanau sve grhe."<span class="spasi1"></span>"Wahai pasangan suami-isteri, semoga kalian tetap bersatu dan tidak pernah terpisahkan. Semoga kalian mencapai hidup penuh kebahagiaan, tinggal di rumah yang penuh kegembiraan bersama seluruh keturunanmu."<span class="spasi2"></span>~ Rg Veda X.85.42 ~
+      <p class="urut" style="--d:.2s">The Wedding Of</p>
+      <div class="judul-script urut" style="--d:.5s">Rose &amp; Ryan</div>
+      <p class="tgl-hero urut" id="tanggal-hero" style="--d:.8s"></p>
+      <hr class="urut" style="--d:1s">
+      <p class="kutipan urut" style="--d:1.3s">"Ihaiva stam ma vi yaustam, visvam ayur vyasnutam, kridantau putrair naptrbhih, modamanau sve grhe."<span class="spasi1"></span>"Wahai pasangan suami-isteri, semoga kalian tetap bersatu dan tidak pernah terpisahkan. Semoga kalian mencapai hidup penuh kebahagiaan, tinggal di rumah yang penuh kegembiraan bersama seluruh keturunanmu."<span class="spasi2"></span>~ Rg Veda X.85.42 ~
         </p>
     </div>
   </section>
@@ -564,6 +617,7 @@ body.terbuka #musik-btn{display:block}
   <!-- ======================= PENUTUP ======================= -->
   <section id="penutup" class="foto f-penutup">
   <img class="isi" src="cover.jpg" alt="" onerror="this.remove()">
+    <div class="sprinkle" data-jumlah="28" aria-hidden="true"></div>
     <div class="teks muncul">
       <p>With Love</p>
       <div class="judul-script">Rose &amp; Ryan</div>
@@ -584,6 +638,34 @@ const ACARA = {
   lokasi: "Nama Gedung / Tempat, Jl. Contoh Alamat No. 123",
   nomorWA: "6289662373519"
 };
+
+/* Tanggal di halaman pertama diambil otomatis dari ACARA.mulai di atas */
+document.getElementById("tanggal-hero").textContent =
+  ACARA.mulai.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Makassar" });
+
+/* ============================================================
+   SPRINKLE EMAS - ubah angka di sini
+   JUMLAH : banyaknya partikel (dulu belum ada, sekarang 45)
+   Tiap 3 partikel, 1 jadi bokeh (besar & buram), sisanya kilau kecil
+   ============================================================ */
+const JUMLAH = 45;
+document.querySelectorAll(".sprinkle").forEach(function buatSprinkle(wadah){
+  const jumlah = Number(wadah.dataset.jumlah) || JUMLAH;
+  for (let i = 0; i < jumlah; i++){
+    const p = document.createElement("span");
+    const bokeh = i % 3 === 0;
+    const ukuran = bokeh ? 18 + Math.random() * 30 : 3 + Math.random() * 5;
+    p.className = "emas " + (bokeh ? "bokeh" : "kilau");
+    p.style.width = p.style.height = ukuran + "px";
+    p.style.left = (Math.random() * 100) + "%";
+    p.style.top = (Math.random() * 100) + "%";
+    p.style.setProperty("--durasi", (7 + Math.random() * 7) + "s");
+    p.style.setProperty("--tunda", (-Math.random() * 14) + "s");
+    p.style.setProperty("--jarak", (-(80 + Math.random() * 160)) + "px");
+    p.style.setProperty("--goyang", ((Math.random() < .5 ? -1 : 1) * (8 + Math.random() * 17)) + "px");
+    wadah.appendChild(p);
+  }
+});
 
 const tamu = new URLSearchParams(location.search).get("to");
 if (tamu) document.getElementById("nama-tamu").textContent = tamu;
@@ -693,7 +775,7 @@ titikNav.children[0].classList.add("aktif");
    LAMA_GESER  : lama animasi saat bergeser (dulu 1100)
    JEDA_SENTUH : lama diam setelah jari dilepas sebelum jalan lagi (dulu 4000)
    ============================================================ */
-const JEDA_SLIDE = 2500, LAMA_GESER = 1000, JEDA_SENTUH = 1000;
+const JEDA_SLIDE = 2000, LAMA_GESER = 600, JEDA_SENTUH = 1200;
 const ASLI = slides.length, KLON = 3;
 for (let k = 0; k < KLON; k++){
   const c = slides[k].cloneNode(true);
@@ -816,6 +898,9 @@ document.getElementById("form-ucapan").addEventListener("submit", e => {
 });
 
 function mulaiAnimasi(){
+  document.fonts.ready.then(jalankanAnimasi);
+}
+function jalankanAnimasi(){
   const pengamat = new IntersectionObserver((daftarElemen, p) => {
     daftarElemen.filter(e => e.isIntersecting).forEach((e, i) => {
       e.target.style.transitionDelay = (i * 0.18) + "s";
@@ -827,4 +912,4 @@ function mulaiAnimasi(){
 }
 </script>
 </body>
-</html>5
+</html>
