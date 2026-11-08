@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Wedding of Rose & Ryan</title>
 
+<!-- ============================================================
+     PREVIEW LINK DI WHATSAPP (Open Graph)
+     WAJIB GANTI: USERNAME dan NAMA-REPO dengan milikmu,
+     dan pastikan file preview.jpg (1200x630, di bawah 300 KB)
+     sudah di-upload ke GitHub, satu folder dengan index.html.
+     ============================================================ -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Wedding of Rose & Ryan">
+<meta property="og:description" content="Dengan memohon Ridho dan Rahmat Tuhan Yang Maha Esa, kami mengundang Anda ke pernikahan kami.">
+<meta property="og:image" content="https://USERNAME.github.io/NAMA-REPO/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://USERNAME.github.io/NAMA-REPO/">
+
 <!-- Font dari Google Fonts (butuh internet). Kalau offline, otomatis pakai font cadangan. -->
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
@@ -451,7 +465,7 @@ body.terbuka #musik-btn{display:block}
       <div class="judul-script urut" style="--d:.5s">Rose &amp; Ryan</div>
       <p class="tgl-hero urut" id="tanggal-hero" style="--d:.8s"></p>
       <hr class="urut" style="--d:1s">
-      <p class="kutipan urut" style="--d:1.3s">"Ihaiva stam ma vi yaustam, visvam ayur vyasnutam, kridantau putrair naptrbhih, modamanau sve grhe."<span class="spasi1"></span>"Wahai pasangan suami-isteri, semoga kalian tetap bersatu dan tidak pernah terpisahkan. Semoga kalian mencapai hidup penuh kebahagiaan, tinggal di rumah yang penuh kegembiraan bersama seluruh keturunanmu."<span class="spasi2"></span>~ Rg Veda X.85.42 ~
+      <p class="kutipan urut" style="--d:1.3s"><i>"Ihaiva stam ma vi yaustam, visvam ayur vyasnutam, kridantau putrair naptrbhih, modamanau sve grhe."</i><span class="spasi1"></span>"Wahai pasangan suami-isteri, semoga kalian tetap bersatu dan tidak pernah terpisahkan. Semoga kalian mencapai hidup penuh kebahagiaan, tinggal di rumah yang penuh kegembiraan bersama seluruh keturunanmu."<span class="spasi2"></span><i>~ Rg Veda X.85.42 ~</i>
         </p>
     </div>
   </section>
@@ -777,7 +791,7 @@ titikNav.children[0].classList.add("aktif");
    LAMA_GESER  : lama animasi saat bergeser (dulu 1100)
    JEDA_SENTUH : lama diam setelah jari dilepas sebelum jalan lagi (dulu 4000)
    ============================================================ */
-const JEDA_SLIDE = 2000, LAMA_GESER = 800, JEDA_SENTUH = 100;
+const JEDA_SLIDE = 2000, LAMA_GESER = 800, JEDA_SENTUH = 0;
 const ASLI = slides.length, KLON = 3;
 for (let k = 0; k < KLON; k++){
   const c = slides[k].cloneNode(true);
